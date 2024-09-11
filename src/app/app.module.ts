@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PrimeNGModule } from '../shared/modules/primeNG.module';
-import { ControlDashboardComponent } from './Components/control-dashboard/control-dashboard.component';
+import { ControlDashboardComponent } from './components/control-dashboard/control-dashboard.component';
 
 @NgModule({
   declarations: [AppComponent, ControlDashboardComponent],

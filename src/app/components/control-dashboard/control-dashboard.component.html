@@ -1,0 +1,50 @@
+
+
+<div class="main-div">
+    <div class="div-container p-fluid p-formgrid p-grid">
+
+        <!-- Label: Setpoint -->
+        <div class="p-field p-col-12 p-md-4">
+          <label for="setpoint">Setpoint</label>
+          <p-inputNumber
+          [(ngModel)]="setpointValue"
+          (ngModelChange)="triggerVibration()"
+          [min]="0"
+          [step]="0.5"
+          [showButtons]="true"
+          [useGrouping]="false"
+          [mode]="'decimal'"
+          class="no-type"
+        ></p-inputNumber>
+        </div>
+      
+        <!-- Toggle: Auto/Manual -->
+        <div class="p-field p-col-12 p-md-4">
+          <label for="autoManual">Modo</label>
+          <p-selectButton
+            [(ngModel)]="mode"
+            (ngModelChange)="triggerVibration()"
+            [options]="autoManualOptions"
+            optionLabel="label"
+            optionValue="value"
+            [multiple]="false"
+          ></p-selectButton>
+        </div>
+      
+        <!-- Toggle: Ação Reversa/Ação Direta -->
+        <div class="p-field p-col-12 p-md-4">
+          <label for="acao">Ação</label>
+          <p-selectButton
+            [(ngModel)]="acao"
+            (ngModelChange)="triggerVibration()"
+            [options]="acaoOptions"
+            optionLabel="label"
+            optionValue="value"
+            [multiple]="false"
+          ></p-selectButton>
+        </div>
+      
+      </div>
+</div>
+
+  

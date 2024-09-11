@@ -1,0 +1,80 @@
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+
+# Compiled output
+/dist
+/tmp
+/out-tsc
+
+# Node modules
+/node_modules
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+*.env
+*.local
+
+# IDEs and editors
+.idea/
+.vscode/
+*.suo
+*.ntvs_analysis.dat
+*.njsproj
+*.sln
+*.sw?
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Angular specific
+.angular/cache
+.angular/architects
+.angular/cache/*
+.angular/cache/**/*
+
+# Coverage directory used by tools like istanbul
+/coverage
+
+# TypeScript compilation
+*.tsbuildinfo
+
+# Angular CLI
+.angular-cli.json
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Build artifacts
+*.tgz
+*.gz
+
+# Package distribution
+*.tgz
+*.tar.gz
+
+# Dependency directories
+bower_components/
+jspm_packages/
+
+# Compiled JavaScript files
+*.js
+*.d.ts
+
+# Compiled CSS files
+*.css
+
+# Logs
+*.log
+
+# Yarn Integrity file
+.yarn-integrity
+
+# JetBrains Rider IDE
+.idea/

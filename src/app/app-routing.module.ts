@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ControlDashboardComponent } from './components/control-dashboard/control-dashboard.component';
 
 const routes: Routes = [
+  { path: "", component: ControlDashboardComponent },
   { path: "dashboard", component: ControlDashboardComponent },
 ];
 

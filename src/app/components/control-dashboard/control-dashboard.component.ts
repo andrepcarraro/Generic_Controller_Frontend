@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ControlParametersModel } from '../../../shared/models/control.model';
 import { SignalRService } from '../../../shared/services/signalr.service';
 
@@ -8,71 +8,67 @@ import { SignalRService } from '../../../shared/services/signalr.service';
   styleUrl: './control-dashboard.component.scss'
 })
 export class ControlDashboardComponent implements OnInit {
+  constructor(private signalRService: SignalRService) { }
+
+  // Auto/Manual Options
+  autoManualOptions = [
+    { label: 'Auto', value: true },
+    { label: 'Manual', value: false }
+  ];
+
+  // Ação Reversa/Direta Options
+  acaoOptions = [
+    { label: 'Ação Reversa', value: false },
+    { label: 'Ação Direta', value: true }
+  ];
+
   setpointValue = 0;
   controllerParameters!: ControlParametersModel;
 
   processVariable = 0;
   output = 0;
 
-  constructor(private signalRService: SignalRService) {}
-
   ngOnInit(): void {
-    debugger
-    // Start the SignalR connection
-    this.signalRService.startConnection();
+    this.createControllerModel(null)
+    this.signalRService.controlParams$.subscribe(controllerParams => {
+     // this.createControllerModel(controllerParams);
+    })
+  }
 
-    // Subscribe to the output from the PID controller
-    this.signalRService.output$.subscribe((output) => {
-      this.output = output;
-    });
+  private createControllerModel(controllerParams: ControlParametersModel | null) {
+    if (controllerParams != null) {
+      this.controllerParameters = controllerParams;
+      return;
+    }
+
+    this.controllerParameters = {
+      kp: 0.1,   // Proporcional
+      ti: 0.1,   // Integral
+      td: 0.1,   // Derivativo
+
+      minOutput: 1,   // Representa 0%
+      maxOutput: 5,   // Representa 100%
+
+      // Modo automático ou manual
+      autoMode: true,
+
+      // Ação direta ou reversa
+      isDirect: true,
+
+      // SetPoint
+      setPoint: 4,
+      // Saída atual no modo manual
+      manualOutput: 1,
+    };
   }
 
   // Send process variable to the SignalR Hub
-  sendProcessVariable(): void {
-    this.signalRService.sendProcessVariable(this.processVariable);
+  setControlParameters(): void {
+    this.signalRService.setControlParameters(this.controllerParameters);
   }
-
-  // Auto/Manual Options
-  autoManualOptions = [
-    { label: 'Auto', value: 'auto' },
-    { label: 'Manual', value: 'manual' }
-  ];
-  mode = 'manual';
-
-  // Ação Reversa/Direta Options
-  acaoOptions = [
-    { label: 'Ação Reversa', value: 'reversa' },
-    { label: 'Ação Direta', value: 'direta' }
-  ];
-  acao = 'direta';
 
   public triggerVibration() {
-    if (navigator.vibrate) {
+    if (navigator.vibrate)
       navigator.vibrate(200); // Vibrates for 200 milliseconds
-    } else {
-      console.warn('Vibration API not supported');
-    }
-  }
-
-  public createCotrollerModel(){
-    this.controllerParameters = {
-      Kp: 0.1,   // Proporcional
-      Ti: 0.1,   // Integral
-      Td: 0.1,   // Derivativo
-  
-      MinOutput: 1,   // Representa 0%
-      MaxOutput: 5,   // Representa 100%
-  
-      // Modo automático ou manual
-      AutoMode: true,
-  
-      // Ação direta ou reversa
-      IsDirect: true,
-  
-      // SetPoint
-      SetPoint: 1, 
-      // Saída atual no modo manual
-      ManualOutput: 1, 
-    };
   }
 }

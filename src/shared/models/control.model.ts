@@ -1,21 +1,21 @@
 export interface ControlParametersModel
 {
-    Kp: number,   // Proporcional
-    Ti: number,   // Integral
-    Td: number,   // Derivativo
+    kp: number,   // Proporcional
+    ti: number,   // Integral
+    td: number,   // Derivativo
 
     // Limites de 0% e 100%
-    MinOutput: number,   // Representa 0%
-    MaxOutput: number,   // Representa 100%
+    minOutput: number,   // Representa 0%
+    maxOutput: number,   // Representa 100%
 
     // Modo automático ou manual
-    AutoMode: boolean,
+    autoMode: boolean,
 
     // Ação direta ou reversa
-    IsDirect: boolean,
+    isDirect: boolean,
 
     // SetPoint
-    SetPoint: number, 
+    setPoint: number, 
     // Saída atual no modo manual
-    ManualOutput: number, 
+    manualOutput: number, 
 }

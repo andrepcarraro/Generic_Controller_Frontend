@@ -1,6 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ControlParametersModel } from '../../../shared/models/control.model';
 import { SignalRService } from '../../../shared/services/signalr.service';
+import { Sidebar } from 'primeng/sidebar';
 
 @Component({
   selector: 'app-control-dashboard',
@@ -9,6 +10,9 @@ import { SignalRService } from '../../../shared/services/signalr.service';
 })
 export class ControlDashboardComponent implements OnInit {
   constructor(private signalRService: SignalRService) { }
+
+  sidebarVisible = false;
+  @ViewChild('sidebarRef') sidebarRef!: Sidebar;
 
   // Auto/Manual Options
   autoManualOptions = [
@@ -30,9 +34,6 @@ export class ControlDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.createControllerModel(null)
-    this.signalRService.controlParams$.subscribe(controllerParams => {
-     // this.createControllerModel(controllerParams);
-    })
   }
 
   private createControllerModel(controllerParams: ControlParametersModel | null) {
@@ -70,5 +71,10 @@ export class ControlDashboardComponent implements OnInit {
   public triggerVibration() {
     if (navigator.vibrate)
       navigator.vibrate(200); // Vibrates for 200 milliseconds
+  }
+
+  closeCallback(e: Event): void {
+    this.sidebarRef.close(e);
+    this.setControlParameters();
   }
 }

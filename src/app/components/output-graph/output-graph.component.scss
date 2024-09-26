@@ -1,7 +1,83 @@
-.card {
-    margin: 20px;
+.main-div {
+  padding-top: min(10vw, 70px);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.main-div {
-    padding-top: min(10vw, 70px);
+.div-container {
+  max-width: 85vw;
+  width: 100%;
+  padding: 0 24px;
+}
+
+.card {
+  width: 100%;
+}
+
+.control-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+
+  /* Structure for buttons and slider */
+  .control-buttons {
+    display: flex;
+    gap: 10px;
+  }
+
+  .slider-container {
+    padding-left: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .slider-value{
+    min-width: 50px
+  }
+
+  /* For screens wider than 768px, show labels and keep layout inline */
+  @media (min-width: 768px) {
+    .play-btn::ng-deep .p-button-label,
+    .pause-btn::ng-deep .p-button-label {
+      display: inline-block;
+    }
+    .slider-value {
+      display: inline-block;
+    }
+  }
+
+  /* For mobile screens, hide labels and stack the slider below buttons */
+  @media (max-width: 767px) {
+    flex-direction: column;
+    align-items: center;
+
+    .play-btn::ng-deep .p-button-label,
+    .pause-btn::ng-deep .p-button-label {
+      display: none;
+    }
+
+    /* Stack slider below the control buttons */
+    .slider-container {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Shrink slider width for mobile */
+    p-slider {
+      width: 150px;
+    }
+  }
 }

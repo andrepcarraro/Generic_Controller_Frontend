@@ -1,63 +1,155 @@
-<div class="main-div">
-  <div class="div-container p-fluid p-formgrid p-grid">
-    <h1>Parametrização</h1>
+<div class="sidebar-div">
+  <p-sidebar #sidebarRef [(visible)]="sidebarVisible">
+    <ng-template pTemplate="headless">
+      <div class="flex flex-column h-full">
+        <!-- Header da Sidebar -->
+        <div class="flex align-items-center justify-content-between px-4 pt-3 flex-shrink-0">
+          <span class="inline-flex align-items-center gap-2">
+            <img width="50vw" src="logo.jpg" alt="logo" />
+            <span class="font-semibold text-xl text-primary">CONTROLADOR GENÉRICO</span>
+          </span>
+          <span>
+            <p-button
+              type="button"
+              (onClick)="closeCallback($event)"
+              icon="pi pi-times"
+              rounded="true"
+              outlined="true"
+              styleClass="h-2rem w-2rem"
+            ></p-button>
+          </span>
+        </div>
+        <!-- Conteúdo da Sidebar -->
+        <div class="main-div overflow-auto p-4" style="max-height: 100%;">
+          <p-accordion [multiple]="true">
+            <!-- Seção "Sintonia" -->
+            <p-accordionTab header="Sintonia">
+              <div class="p-fluid p-formgrid p-grid div-container">
+                <div class="p-field p-col-12 p-md-4">
+                  <label for="Kp">Kp</label>
+                  <p-inputNumber
+                    [(ngModel)]="controllerParameters.kp"
+                    (ngModelChange)="triggerVibration()"
+                    [min]="0.0"
+                    [step]="0.1"
+                    [showButtons]="true"
+                    [useGrouping]="false"
+                    [mode]="'decimal'"
+                  ></p-inputNumber>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                  <label for="Ti">Ti</label>
+                  <p-inputNumber
+                    [(ngModel)]="controllerParameters.ti"
+                    (ngModelChange)="triggerVibration()"
+                    [min]="0.0"
+                    [step]="0.1"
+                    [showButtons]="true"
+                    [useGrouping]="false"
+                    [mode]="'decimal'"
+                  ></p-inputNumber>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                  <label for="Td">Td</label>
+                  <p-inputNumber
+                    [(ngModel)]="controllerParameters.td"
+                    (ngModelChange)="triggerVibration()"
+                    [min]="0.0"
+                    [step]="0.1"
+                    [showButtons]="true"
+                    [useGrouping]="false"
+                    [mode]="'decimal'"
+                  ></p-inputNumber>
+                </div>
+              </div>
+            </p-accordionTab>
 
-    <!-- Seção "Sintonia"  -->
-    <h3 class="section-title">Sintonia</h3>
-    <div class="p-field p-col-12 p-md-4">
-      <label for="Kp">Kp</label>
-      <p-inputNumber [(ngModel)]="controllerParameters.kp" (ngModelChange)="triggerVibration()" [min]="0.0" [step]="0.1"
-        [showButtons]="true" [useGrouping]="false" [mode]="'decimal'"></p-inputNumber>
-    </div>
-    <div class="p-field p-col-12 p-md-4">
-      <label for="Ti">Ti</label>
-      <p-inputNumber [(ngModel)]="controllerParameters.ti" (ngModelChange)="triggerVibration()" [min]="0.0" [step]="0.1"
-        [showButtons]="true" [useGrouping]="false" [mode]="'decimal'"></p-inputNumber>
-    </div>
-    <div class="p-field p-col-12 p-md-4">
-      <label for="Td">Td</label>
-      <p-inputNumber [(ngModel)]="controllerParameters.td" (ngModelChange)="triggerVibration()" [min]="0.0" [step]="0.1"
-        [showButtons]="true" [useGrouping]="false" [mode]="'decimal'"></p-inputNumber>
-    </div>
+            <!-- Seção "Escala" -->
+            <p-accordionTab header="Escala">
+              <div class="p-fluid p-formgrid p-grid div-container">
+                <div class="p-field p-col-12 p-md-4">
+                  <label for="Valor Minimo">Valor Mínimo</label>
+                  <p-inputNumber
+                    [(ngModel)]="controllerParameters.minOutput"
+                    (ngModelChange)="triggerVibration()"
+                    [min]="0.0"
+                    [step]="0.5"
+                    [showButtons]="true"
+                    [useGrouping]="false"
+                    [mode]="'decimal'"
+                  ></p-inputNumber>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                  <label for="Valor Maximo">Valor Máximo</label>
+                  <p-inputNumber
+                    [(ngModel)]="controllerParameters.maxOutput"
+                    (ngModelChange)="triggerVibration()"
+                    [min]="0.0"
+                    [step]="0.5"
+                    [showButtons]="true"
+                    [useGrouping]="false"
+                    [mode]="'decimal'"
+                  ></p-inputNumber>
+                </div>
+              </div>
+            </p-accordionTab>
 
-    <!-- Seção "Escala"  -->
-    <h3 class="section-title">Escala</h3>
-    <div class="p-field p-col-12 p-md-4">
-      <label for="Valor Minimo">Valor Mínimo</label>
-      <p-inputNumber [(ngModel)]="controllerParameters.minOutput" (ngModelChange)="triggerVibration()" [min]="0.0"
-        [step]="0.5" [showButtons]="true" [useGrouping]="false" [mode]="'decimal'" class="no-type"></p-inputNumber>
-    </div>
-    <div class="p-field p-col-12 p-md-4">
-      <label for="Valor Maximo">Valor Máximo</label>
-      <p-inputNumber [(ngModel)]="controllerParameters.maxOutput" (ngModelChange)="triggerVibration()" [min]="0.0"
-        [step]="0.5" [showButtons]="true" [useGrouping]="false" [mode]="'decimal'" class="no-type"></p-inputNumber>
-    </div>
-
-    <!-- Seção "Parâmetros"  -->
-    <h3 class="section-title">Parâmetros</h3>
-    <div class="p-field p-col-12 p-md-4">
-      <label for="setpoint">Setpoint</label>
-      <p-inputNumber [(ngModel)]="controllerParameters.setPoint" (ngModelChange)="triggerVibration()" [min]="0.0"
-        [step]="0.5" [showButtons]="true" [useGrouping]="false" [mode]="'decimal'" class="no-type"></p-inputNumber>
-    </div>
-
-    <div class="p-field p-col-12 p-md-4">
-      <label for="acao">Ação</label>
-      <p-selectButton [(ngModel)]="controllerParameters.isDirect" (ngModelChange)="triggerVibration()"
-        [options]="acaoOptions" optionLabel="label" optionValue="value" [multiple]="false"></p-selectButton>
-    </div>
-
-    <div class="p-field p-col-12 p-md-4">
-      <label for="autoManual">Modo</label>
-      <p-selectButton [(ngModel)]="controllerParameters.autoMode" (ngModelChange)="triggerVibration()"
-        [options]="autoManualOptions" optionLabel="label" optionValue="value" [multiple]="false"></p-selectButton>
-    </div>
-    <div *ngIf="!controllerParameters.autoMode" class="p-field p-col-12 p-md-4">
-      <label for="ManualOutput">Valor Saída Manual</label>
-      <p-inputNumber [(ngModel)]="controllerParameters.manualOutput" (ngModelChange)="triggerVibration()" [min]="0.0"
-        [max]="100.0" [step]="0.1" [showButtons]="true" [useGrouping]="false" [mode]="'decimal'"></p-inputNumber>
-    </div>
-    <button pButton pRipple label="Enviar" class="p-button-success" (click)="setControlParameters()">
-    </button>
-  </div>
+            <!-- Seção "Parâmetros" -->
+            <p-accordionTab header="Parâmetros">
+              <div class="p-fluid p-formgrid p-grid div-container">
+                <div class="p-field p-col-12 p-md-4">
+                  <label for="setpoint">Setpoint</label>
+                  <p-inputNumber
+                    [(ngModel)]="controllerParameters.setPoint"
+                    (ngModelChange)="triggerVibration()"
+                    [min]="0.0"
+                    [step]="0.5"
+                    [showButtons]="true"
+                    [useGrouping]="false"
+                    [mode]="'decimal'"
+                  ></p-inputNumber>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                  <label for="acao">Ação</label>
+                  <p-selectButton
+                    [(ngModel)]="controllerParameters.isDirect"
+                    (ngModelChange)="triggerVibration()"
+                    [options]="acaoOptions"
+                    optionLabel="label"
+                    optionValue="value"
+                    [multiple]="false"
+                  ></p-selectButton>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                  <label for="autoManual">Modo</label>
+                  <p-selectButton
+                    [(ngModel)]="controllerParameters.autoMode"
+                    (ngModelChange)="triggerVibration()"
+                    [options]="autoManualOptions"
+                    optionLabel="label"
+                    optionValue="value"
+                    [multiple]="false"
+                  ></p-selectButton>
+                </div>
+                <div *ngIf="controllerParameters.autoMode === false" class="p-field p-col-12 p-md-4">
+                  <label for="ManualOutput">Valor Saída Manual</label>
+                  <p-inputNumber
+                    [(ngModel)]="controllerParameters.manualOutput"
+                    (ngModelChange)="triggerVibration()"
+                    [min]="0.0"
+                    [max]="100.0"
+                    [step]="0.1"
+                    [showButtons]="true"
+                    [useGrouping]="false"
+                    [mode]="'decimal'"
+                  ></p-inputNumber>
+                </div>
+              </div>
+            </p-accordionTab>
+          </p-accordion>
+        </div>
+      </div>
+    </ng-template>
+  </p-sidebar>
+  <p-button (onClick)="sidebarVisible = true" icon="pi pi-cog"></p-button>
 </div>

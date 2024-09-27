@@ -1,3 +1,11 @@
-.sidebar-div{
-    position: absolute;
+.sidebar-div {
+  position: absolute;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; // Full viewport height
 }

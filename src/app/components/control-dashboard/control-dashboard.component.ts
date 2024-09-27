@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { ControlParametersModel } from '../../../shared/models/control.model';
 import { SignalRService } from '../../../shared/services/signalr.service';
 import { Sidebar } from 'primeng/sidebar';
@@ -6,10 +12,10 @@ import { Sidebar } from 'primeng/sidebar';
 @Component({
   selector: 'app-control-dashboard',
   templateUrl: './control-dashboard.component.html',
-  styleUrl: './control-dashboard.component.scss'
+  styleUrl: './control-dashboard.component.scss',
 })
-export class ControlDashboardComponent implements OnInit {
-  constructor(private signalRService: SignalRService) { }
+export class ControlDashboardComponent {
+  constructor(private signalRService: SignalRService) {}
 
   sidebarVisible = false;
   @ViewChild('sidebarRef') sidebarRef!: Sidebar;
@@ -17,51 +23,21 @@ export class ControlDashboardComponent implements OnInit {
   // Auto/Manual Options
   autoManualOptions = [
     { label: 'Auto', value: true },
-    { label: 'Manual', value: false }
+    { label: 'Manual', value: false },
   ];
 
   // Ação Reversa/Direta Options
   acaoOptions = [
     { label: 'Ação Reversa', value: false },
-    { label: 'Ação Direta', value: true }
+    { label: 'Ação Direta', value: true },
   ];
 
-  setpointValue = 0;
-  controllerParameters!: ControlParametersModel;
+  // The two-way bound property
+  @Input() controllerParameters!: ControlParametersModel;
 
-  processVariable = 0;
-  output = 0;
-
-  ngOnInit(): void {
-    this.createControllerModel(null)
-  }
-
-  private createControllerModel(controllerParams: ControlParametersModel | null) {
-    if (controllerParams != null) {
-      this.controllerParameters = controllerParams;
-      return;
-    }
-
-    this.controllerParameters = {
-      kp: 0.1,   // Proporcional
-      ti: 0.1,   // Integral
-      td: 0.1,   // Derivativo
-
-      minOutput: 1,   // Representa 0%
-      maxOutput: 5,   // Representa 100%
-
-      // Modo automático ou manual
-      autoMode: true,
-
-      // Ação direta ou reversa
-      isDirect: true,
-
-      // SetPoint
-      setPoint: 4,
-      // Saída atual no modo manual
-      manualOutput: 1,
-    };
-  }
+  // Output event emitter for two-way binding
+  @Output() controllerParametersChange =
+    new EventEmitter<ControlParametersModel>();
 
   // Send process variable to the SignalR Hub
   setControlParameters(): void {
@@ -69,12 +45,17 @@ export class ControlDashboardComponent implements OnInit {
   }
 
   public triggerVibration() {
-    if (navigator.vibrate)
-      navigator.vibrate(200); // Vibrates for 200 milliseconds
+    if (navigator.vibrate) navigator.vibrate(200); // Vibrates for 200 milliseconds
   }
 
   closeCallback(e: Event): void {
     this.sidebarRef.close(e);
+    this.onParameterChange();
+  }
+
+  // Method to trigger change and emit the updated value
+  onParameterChange(): void {
     this.setControlParameters();
+    this.controllerParametersChange.emit(this.controllerParameters);
   }
 }

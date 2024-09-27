@@ -1,6 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Chart } from 'chart.js';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChartData, ChartOptions } from 'chart.js';
 import { SignalRService } from '../../../shared/services/signalr.service';
+import { ControlParametersModel } from '../../../shared/models/control.model';
+import { UIChart } from 'primeng/chart';
 
 @Component({
   selector: 'app-output-graph',
@@ -9,17 +11,35 @@ import { SignalRService } from '../../../shared/services/signalr.service';
 })
 export class OutputGraphComponent implements OnInit {
   constructor(private signalRService: SignalRService) {}
-
-  @ViewChild('chartRef') chartRef!: Chart;
+  @Input() controllerParameters!: ControlParametersModel;
+  @ViewChild('chartRef') chartRef!: UIChart;
   label = 0.0;
-  sliderValue = 50; // Initial slider value
-  data: any;
-  options: any;
+  sliderValue = 0;
+  data!: ChartData;
+  options!: ChartOptions;
 
   ngOnInit() {
+    this.sliderValue = this.controllerParameters.maxOutput / 2;
+    this.signalRService.SetProcessVariable(this.sliderValue);
+
     const documentStyle = getComputedStyle(document.documentElement);
     this.createOptions(documentStyle);
     this.createChart(documentStyle);
+
+    this.signalRService.output$.subscribe((outputModel) => {
+      if (outputModel) {
+        this.data.datasets[0].data.push(outputModel.output);
+        this.data.datasets[1].data.push(outputModel.processVariable);
+        this.data.datasets[2].data.push(outputModel.setPoint);
+
+        this.data?.labels?.push(this.label + '(ms)');
+
+        this.label += this.controllerParameters.cycleTime;
+        if(this.options?.scales?.['y'])
+          this.options.scales['y'].max = this.controllerParameters.maxOutput;
+        this.chartRef?.refresh();
+      }
+    });
   }
 
   createOptions(documentStyle: CSSStyleDeclaration): void {
@@ -49,6 +69,8 @@ export class OutputGraphComponent implements OnInit {
           },
         },
         y: {
+          min: 0, // Start Y-axis at 0
+          max: this.controllerParameters.maxOutput, // End Y-axis at 100
           ticks: {
             color: textColorSecondary,
           },
@@ -62,11 +84,11 @@ export class OutputGraphComponent implements OnInit {
 
   createChart(documentStyle: CSSStyleDeclaration) {
     this.data = {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+      labels: [],
       datasets: [
         {
           label: 'Variável manipulada',
-          data: [12, 51, 62, 33, 21, 62, 45],
+          data: [],
           fill: true,
           borderColor: documentStyle.getPropertyValue('--orange-500'),
           tension: 0.4,
@@ -74,14 +96,14 @@ export class OutputGraphComponent implements OnInit {
         },
         {
           label: 'Variável de processo',
-          data: [65, 59, 80, 81, 56, 55, 40],
+          data: [],
           fill: false,
           tension: 0.4,
           borderColor: documentStyle.getPropertyValue('--blue-500'),
         },
         {
           label: 'Setpoint',
-          data: [28, 48, 40, 19, 86, 27, 90],
+          data: [],
           fill: false,
           borderDash: [5, 5],
           tension: 0.4,
@@ -91,31 +113,15 @@ export class OutputGraphComponent implements OnInit {
     };
   }
 
-  startSimulation(): void {
-    this.signalRService.StartSimulation();
-    this.signalRService.output$.subscribe((output) => {
-      this.data.datasets[0].data.push(output * 100);
-      this.data.labels.push(this.label);
-
-      this.label += 1;
-      this.chartRef.update();
-    });
-  }
-
-
-
   onPlay() {
-    console.log('Play button clicked');
-    // Add logic for play action
+    this.signalRService.StartSimulation();
   }
 
   onPause() {
-    console.log('Pause button clicked');
-    // Add logic for pause action
+    this.signalRService.StopSimulation();
   }
 
-  onSliderChange(event: any) {
-    console.log('Slider value changed:', this.sliderValue);
-    // Add logic for slider change action
+  onSliderChange() {
+    this.signalRService.SetProcessVariable(this.sliderValue);
   }
 }

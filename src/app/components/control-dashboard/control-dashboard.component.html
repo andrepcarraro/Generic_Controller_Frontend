@@ -1,12 +1,12 @@
 <div class="sidebar-div">
-  <p-sidebar #sidebarRef [(visible)]="sidebarVisible">
+  <p-sidebar #sidebarRef [(visible)]="sidebarVisible" (onHide)="onParameterChange()">
     <ng-template pTemplate="headless">
       <div class="flex flex-column h-full">
         <!-- Header da Sidebar -->
         <div class="flex align-items-center justify-content-between px-4 pt-3 flex-shrink-0">
           <span class="inline-flex align-items-center gap-2">
             <img width="50vw" src="logo.jpg" alt="logo" />
-            <span class="font-semibold text-xl text-primary">CONTROLADOR GENÉRICO</span>
+            <span class="font-semibold text-xl text-primary">Controlador Genérico</span>
           </span>
           <span>
             <p-button
@@ -110,6 +110,17 @@
                   ></p-inputNumber>
                 </div>
                 <div class="p-field p-col-12 p-md-4">
+                  <label for="Tempo de ciclo (ms)">Tempo de ciclo (ms)</label>
+                  <p-inputNumber
+                    [(ngModel)]="controllerParameters.cycleTime"
+                    (ngModelChange)="triggerVibration()"
+                    [min]="0"
+                    [step]="500"
+                    [showButtons]="true"
+                    [useGrouping]="false"
+                  ></p-inputNumber>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
                   <label for="acao">Ação</label>
                   <p-selectButton
                     [(ngModel)]="controllerParameters.isDirect"
@@ -132,7 +143,7 @@
                   ></p-selectButton>
                 </div>
                 <div *ngIf="controllerParameters.autoMode === false" class="p-field p-col-12 p-md-4">
-                  <label for="ManualOutput">Valor Saída Manual</label>
+                  <label for="ManualOutput">Valor Saída Manual (%)</label>
                   <p-inputNumber
                     [(ngModel)]="controllerParameters.manualOutput"
                     (ngModelChange)="triggerVibration()"

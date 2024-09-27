@@ -34,14 +34,14 @@
       <!-- Slider -->
       <p-slider
         [(ngModel)]="sliderValue"
-        (onChange)="onSliderChange($event)"
-        [min]="0"
-        [max]="100"
+        (onChange)="onSliderChange()"
+        [min]="controllerParameters.minOutput"
+        [max]="controllerParameters.maxOutput"
         [style]="{ width: '200px' }"
       ></p-slider>
   
       <!-- Display the slider value -->
-      <span class="slider-value">{{ sliderValue }}%</span>
+      <span class="slider-value">{{ sliderValue }}</span>
     </div>
   </div>
   

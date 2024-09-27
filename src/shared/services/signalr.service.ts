@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { BehaviorSubject } from 'rxjs';
-import { ControlParametersModel } from '../models/control.model';
+import { ControlParametersModel, OutputModel } from '../models/control.model';
 
 @Injectable({
   providedIn: 'root',
@@ -10,14 +10,11 @@ export class SignalRService {
   private hubConnection: signalR.HubConnection | undefined;
 
   // Behavior subjects to emit values received from the hub
-  private outputSubject = new BehaviorSubject<number>(0);
+  private outputSubject = new BehaviorSubject<OutputModel | null>(null);
   public output$ = this.outputSubject.asObservable();
 
-  private controlParamsSubject = new BehaviorSubject<ControlParametersModel | null>(null);
-  public controlParams$ = this.controlParamsSubject.asObservable();
-
   // Start the connection to the ControlHub
-  public startConnection(): void {
+  public startConnection(controlParameters: ControlParametersModel): void {
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl('http://localhost:5010/controlHub')
       .configureLogging(signalR.LogLevel.Debug)
@@ -29,6 +26,7 @@ export class SignalRService {
       .then(() => {
         console.log('SignalR connected to ControlHub.');
         this.registerListeners();
+        this.setControlParameters(controlParameters)
       })
       .catch((err) => console.log('Error starting SignalR connection: ' + err));
   }
@@ -36,48 +34,73 @@ export class SignalRService {
   // Register listeners for events from the hub
   private registerListeners(): void {
     this.hubConnection?.onreconnecting((error) => {
-        console.warn('Reconnecting...', error);
-      })
-      
-      this.hubConnection?.onreconnected((connectionId) => {
-        console.log('Reconnected. Connected with connectionId:', connectionId);
-      })
+      console.warn('Reconnecting...', error);
+    });
 
-      this.hubConnection?.onclose((error) => {
-        console.error('Connection closed. Trying to reconnect...', error);
-      });
+    this.hubConnection?.onreconnected((connectionId) => {
+      console.log('Reconnected. Connected with connectionId:', connectionId);
+    });
+
+    this.hubConnection?.onclose((error) => {
+      console.error('Connection closed. Trying to reconnect...', error);
+    });
 
     this.hubConnection?.on('Output', (output) => {
-      console.log(output)
+      console.log(output);
       this.outputSubject.next(output);
     });
 
-    this.hubConnection?.on('ControlParametersUpdated', (params: ControlParametersModel) => {
-      this.controlParamsSubject.next(params);
+    this.hubConnection?.on('ProcessVariableUpdated', (output) => {
+      console.log(output);
     });
 
-    this.hubConnection?.on('ControlParameters', (params: ControlParametersModel) => {
-      this.controlParamsSubject.next(params);
+    this.hubConnection?.on('StopSimulation', (output) => {
+      console.log(output);
     });
-  }
 
-  // Send process variable to the hub
-  public GetControlParameters(): void {
-    this.hubConnection
-      ?.invoke('GetControlParameters')
-      .catch((err) => console.error(err));
+    this.hubConnection?.on('StartSimulation', (output) => {
+      console.log(output);
+    });
+
+    this.hubConnection?.on('ControlParametersUpdated', (output) => {
+      console.log(output);
+    });
   }
 
   // Set control parameters on the hub
   public setControlParameters(controlParameters: ControlParametersModel): void {
     this.hubConnection
-      ?.invoke('SetControlParameters', controlParameters.kp, controlParameters.ti, controlParameters.td, controlParameters.minOutput, controlParameters.maxOutput, controlParameters.autoMode, controlParameters.isDirect, controlParameters.setPoint, controlParameters.manualOutput, 1000)
+      ?.invoke(
+        'SetControlParameters',
+        controlParameters.kp,
+        controlParameters.ti,
+        controlParameters.td,
+        controlParameters.minOutput,
+        controlParameters.maxOutput,
+        controlParameters.autoMode,
+        controlParameters.isDirect,
+        controlParameters.setPoint,
+        controlParameters.manualOutput,
+        controlParameters.cycleTime
+      )
       .catch((err) => console.error(err));
   }
 
-  public StartSimulation(): void{
+  public StartSimulation(): void {
     this.hubConnection
       ?.invoke('StartSimulation')
+      .catch((err) => console.error(err));
+  }
+
+  public StopSimulation(): void {
+    this.hubConnection
+      ?.invoke('StopSimulation')
+      .catch((err) => console.error(err));
+  }
+
+  public SetProcessVariable(processVariable: number): void {
+    this.hubConnection
+      ?.invoke('SetProcessVariable', processVariable)
       .catch((err) => console.error(err));
   }
 }

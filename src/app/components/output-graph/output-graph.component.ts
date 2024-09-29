@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ChartData, ChartOptions } from 'chart.js';
 import { SignalRService } from '../../../shared/services/signalr.service';
 import { ControlParametersModel } from '../../../shared/models/control.model';
@@ -17,6 +17,9 @@ export class OutputGraphComponent implements OnInit {
   sliderValue = 0;
   data!: ChartData;
   options!: ChartOptions;
+  isAutoMode = true;
+  manualOutput = 0.0;
+  currentOutput = 0.0;
 
   ngOnInit() {
     this.sliderValue = this.controllerParameters.maxOutput / 2;
@@ -28,6 +31,7 @@ export class OutputGraphComponent implements OnInit {
 
     this.signalRService.output$.subscribe((outputModel) => {
       if (outputModel) {
+        this.currentOutput = this.AdjustValueToScale(outputModel.output);
         this.data.datasets[0].data.push(outputModel.output);
         this.data.datasets[1].data.push(outputModel.processVariable);
         this.data.datasets[2].data.push(outputModel.setPoint);
@@ -35,7 +39,7 @@ export class OutputGraphComponent implements OnInit {
         this.data?.labels?.push(this.label + '(ms)');
 
         this.label += this.controllerParameters.cycleTime;
-        if(this.options?.scales?.['y'])
+        if (this.options?.scales?.['y'])
           this.options.scales['y'].max = this.controllerParameters.maxOutput;
         this.chartRef?.refresh();
       }
@@ -123,5 +127,23 @@ export class OutputGraphComponent implements OnInit {
 
   onSliderChange() {
     this.signalRService.SetProcessVariable(this.sliderValue);
+  }
+
+  onModeChange() {
+    this.manualOutput = this.currentOutput * 100;
+    this.signalRService.SetManualOutput(this.manualOutput / 100);
+    this.signalRService.ChangeMode(this.isAutoMode);
+  }
+
+  onManualOutputChange() {
+    this.signalRService.SetManualOutput(this.manualOutput / 100);
+  }
+
+  AdjustValueToScale(value: number) {
+    if (this.controllerParameters.maxOutput == 0) return 0.0;
+
+    const percent = (value * 100.0) / this.controllerParameters.maxOutput;
+
+    return percent / 100;
   }
 }

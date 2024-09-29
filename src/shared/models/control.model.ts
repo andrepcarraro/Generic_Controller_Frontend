@@ -7,16 +7,11 @@ export interface ControlParametersModel {
   minOutput: number; // Representa 0%
   maxOutput: number; // Representa 100%
 
-  // Modo automático ou manual
-  autoMode: boolean;
-
   // Ação direta ou reversa
   isDirect: boolean;
 
   // SetPoint
   setPoint: number;
-  // Saída atual no modo manual
-  manualOutput: number;
 
   //Tempo entre as interações do controlador em milissegundos
   cycleTime: number;

@@ -131,30 +131,6 @@
                     [multiple]="false"
                   ></p-selectButton>
                 </div>
-                <div class="p-field p-col-12 p-md-4">
-                  <label for="autoManual">Modo</label>
-                  <p-selectButton
-                    [(ngModel)]="controllerParameters.autoMode"
-                    (ngModelChange)="triggerVibration()"
-                    [options]="autoManualOptions"
-                    optionLabel="label"
-                    optionValue="value"
-                    [multiple]="false"
-                  ></p-selectButton>
-                </div>
-                <div *ngIf="controllerParameters.autoMode === false" class="p-field p-col-12 p-md-4">
-                  <label for="ManualOutput">Valor Saída Manual (%)</label>
-                  <p-inputNumber
-                    [(ngModel)]="controllerParameters.manualOutput"
-                    (ngModelChange)="triggerVibration()"
-                    [min]="0.0"
-                    [max]="100.0"
-                    [step]="0.1"
-                    [showButtons]="true"
-                    [useGrouping]="false"
-                    [mode]="'decimal'"
-                  ></p-inputNumber>
-                </div>
               </div>
             </p-accordionTab>
           </p-accordion>

@@ -13,24 +13,20 @@ export class AppComponent implements OnInit {
   graphicVisible = false;
   title = 'Generic_Controller_Frontend';
   controllerParameters: ControlParametersModel = {
-    kp: 3, // Proporcional
-    ti: 0.5, // Integral
-    td: 0.8, // Derivativo
+    kp: 5, // Proporcional
+    ti: 0.6, // Integral
+    td: 0.4, // Derivativo
 
     minOutput: 1, // Representa 0%
-    maxOutput: 250, // Representa 100%
-
-    // Modo automático ou manual
-    autoMode: true,
+    maxOutput: 1000, // Representa 100%
 
     // Ação direta ou reversa
     isDirect: true,
 
     // SetPoint
-    setPoint: 100,
-    // Saída atual no modo manual
-    manualOutput: 1,
-    cycleTime: 1500,
+    setPoint: 600,
+
+    cycleTime: 500,
   };
 
   ngOnInit(): void {

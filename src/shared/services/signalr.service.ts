@@ -65,6 +65,14 @@ export class SignalRService {
     this.hubConnection?.on('ControlParametersUpdated', (output) => {
       console.log(output);
     });
+
+    this.hubConnection?.on('modeChanged', (output) => {
+      console.log(output);
+    });
+
+    this.hubConnection?.on('manualOutputUpdated', (output) => {
+      console.log(output);
+    });
   }
 
   // Set control parameters on the hub
@@ -77,10 +85,8 @@ export class SignalRService {
         controlParameters.td,
         controlParameters.minOutput,
         controlParameters.maxOutput,
-        controlParameters.autoMode,
         controlParameters.isDirect,
         controlParameters.setPoint,
-        controlParameters.manualOutput,
         controlParameters.cycleTime
       )
       .catch((err) => console.error(err));
@@ -101,6 +107,18 @@ export class SignalRService {
   public SetProcessVariable(processVariable: number): void {
     this.hubConnection
       ?.invoke('SetProcessVariable', processVariable)
+      .catch((err) => console.error(err));
+  }
+
+  public ChangeMode(isAutoModel: boolean): void {
+    this.hubConnection
+      ?.invoke('ChangeMode', isAutoModel)
+      .catch((err) => console.error(err));
+  }
+
+  public SetManualOutput(manualOutput: number): void {
+    this.hubConnection
+      ?.invoke('SetManualOutput', manualOutput)
       .catch((err) => console.error(err));
   }
 }

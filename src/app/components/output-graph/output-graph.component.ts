@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewChecked, Component, DoCheck, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { ChartData, ChartOptions } from 'chart.js';
 import { SignalRService } from '../../../shared/services/signalr.service';
 import { ControlParametersModel } from '../../../shared/models/control.model';
@@ -9,8 +9,8 @@ import { UIChart } from 'primeng/chart';
   templateUrl: './output-graph.component.html',
   styleUrls: ['./output-graph.component.scss'],
 })
-export class OutputGraphComponent implements OnInit {
-  constructor(private signalRService: SignalRService) {}
+export class OutputGraphComponent implements OnInit, AfterViewChecked {
+  constructor(private signalRService: SignalRService) { }
   @Input() controllerParameters!: ControlParametersModel;
   @ViewChild('chartRef') chartRef!: UIChart;
   label = 0.0;
@@ -45,6 +45,13 @@ export class OutputGraphComponent implements OnInit {
       }
     });
   }
+  ngAfterViewChecked(): void {
+    let placeholder = document.getElementById("control-bar-placeholder");
+    let controlBar = document.getElementById("control-bar");
+
+    if (placeholder && controlBar)
+      placeholder.style.height = (controlBar.offsetHeight + 24) + "px";
+  }
 
   createOptions(documentStyle: CSSStyleDeclaration): void {
     const textColor = documentStyle.getPropertyValue('--text-color');
@@ -74,7 +81,7 @@ export class OutputGraphComponent implements OnInit {
         },
         y: {
           min: 0, // Start Y-axis at 0
-          max: this.controllerParameters.maxOutput, // End Y-axis at 100
+          max: this.controllerParameters.maxOutput + 100, // End Y-axis at 100
           ticks: {
             color: textColorSecondary,
           },
@@ -95,14 +102,14 @@ export class OutputGraphComponent implements OnInit {
           data: [],
           fill: true,
           borderColor: documentStyle.getPropertyValue('--orange-500'),
-          tension: 0.4,
+          tension: 0,
           backgroundColor: 'rgba(255,167,38,0.2)',
         },
         {
           label: 'Variável de processo',
           data: [],
           fill: false,
-          tension: 0.4,
+          tension: 0,
           borderColor: documentStyle.getPropertyValue('--blue-500'),
         },
         {
@@ -110,7 +117,7 @@ export class OutputGraphComponent implements OnInit {
           data: [],
           fill: false,
           borderDash: [5, 5],
-          tension: 0.4,
+          tension: 0,
           borderColor: documentStyle.getPropertyValue('--teal-500'),
         },
       ],

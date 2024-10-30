@@ -2,12 +2,7 @@
   <div class="main-div">
     <div class="div-container">
       <div class="card">
-        <p-chart
-          #chartRef
-          type="line"
-          [data]="data"
-          [options]="options"
-        ></p-chart>
+        <canvas id="canvas">{{chart}}</canvas>
       </div>
     </div>
   </div>

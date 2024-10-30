@@ -12,6 +12,7 @@ export class AppComponent implements OnInit {
   isLoading = false;
   graphicVisible = false;
   title = 'Generic_Controller_Frontend';
+
   controllerParameters: ControlParametersModel = {
     kp: 1, // Proporcional
     ti: 99, // Integral

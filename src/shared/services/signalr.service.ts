@@ -50,10 +50,6 @@ export class SignalRService {
       this.outputSubject.next(output);
     });
 
-    this.hubConnection?.on('ProcessVariableUpdated', (output) => {
-      console.log(output);
-    });
-
     this.hubConnection?.on('StopSimulation', (output) => {
       console.log(output);
     });
@@ -87,7 +83,10 @@ export class SignalRService {
         controlParameters.maxOutput,
         controlParameters.isDirect,
         controlParameters.setPoint,
-        controlParameters.cycleTime
+        controlParameters.cycleTime,
+        controlParameters.tau,
+        controlParameters.disturb,
+        controlParameters.processDeadTime
       )
       .catch((err) => console.error(err));
   }
@@ -101,12 +100,6 @@ export class SignalRService {
   public StopSimulation(): void {
     this.hubConnection
       ?.invoke('StopSimulation')
-      .catch((err) => console.error(err));
-  }
-
-  public SetProcessVariable(processVariable: number): void {
-    this.hubConnection
-      ?.invoke('SetProcessVariable', processVariable)
       .catch((err) => console.error(err));
   }
 

@@ -24,7 +24,6 @@ export class OutputGraphComponent implements OnInit, AfterViewChecked {
 
   ngOnInit() {
     this.sliderValue = this.controllerParameters.maxOutput / 2;
-    this.signalRService.SetProcessVariable(this.sliderValue);
 
     const documentStyle = getComputedStyle(document.documentElement);
     this.createChart(documentStyle);
@@ -32,7 +31,7 @@ export class OutputGraphComponent implements OnInit, AfterViewChecked {
     this.signalRService.output$.subscribe((outputModel) => {
       if (outputModel) {
         this.currentOutput = this.AdjustValueToScale(outputModel.output);
-        debugger
+
         this.chart.data.datasets[0].data.push(outputModel.output);
         this.chart.data.datasets[1].data.push(outputModel.processVariable);
         this.chart.data.datasets[2].data.push(outputModel.setPoint);
@@ -61,7 +60,8 @@ export class OutputGraphComponent implements OnInit, AfterViewChecked {
       data: {
         labels: [],
         datasets: [
-          {
+          
+        {
             label: 'Variável manipulada',
             data: [],
             borderColor: documentStyle.getPropertyValue('--orange-500'),
@@ -85,6 +85,7 @@ export class OutputGraphComponent implements OnInit, AfterViewChecked {
       options: {
         scales: {
           y: {
+            max: this.controllerParameters.maxOutput ,
             beginAtZero: true,
           },
         },
@@ -98,10 +99,6 @@ export class OutputGraphComponent implements OnInit, AfterViewChecked {
 
   onPause() {
     this.signalRService.StopSimulation();
-  }
-
-  onSliderChange() {
-    this.signalRService.SetProcessVariable(this.sliderValue);
   }
 
   onModeChange() {

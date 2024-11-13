@@ -10,62 +10,25 @@
   <div id="control-bar" class="control-bar">
     <div class="control-buttons">
       <!-- Play button -->
-      <p-button
-        icon="pi pi-play"
-        label="Play"
-        (click)="onPlay()"
-        class="p-button-success play-btn"
-      ></p-button>
+      <p-button icon="pi pi-play" label="Play" (click)="onPlay()" class="p-button-success play-btn"></p-button>
 
       <!-- Pause button -->
-      <p-button
-        icon="pi pi-pause"
-        label="Pause"
-        (click)="onPause()"
-        class="p-button-warning pause-btn"
-      ></p-button>
+      <p-button icon="pi pi-pause" label="Pause" (click)="onPause()" class="p-button-warning pause-btn"></p-button>
 
       <!-- Mode toggle (Auto / Manual) -->
-      <p-toggleButton
-        [(ngModel)]="isAutoMode"
-        (onChange)="onModeChange()"
-        onLabel="Auto"
-        offLabel="Manual"
-        onIcon="pi pi-check"
-        offIcon="pi pi-times"
-        onIcon="pi pi-lock"
-        offIcon="pi pi-lock-open"
-        styleClass="w-9rem"
-        ariaLabel="Do you confirm"
-      />
+      <p-toggleButton [(ngModel)]="isAutoMode" (onChange)="onModeChange()" onLabel="Auto" offLabel="Manual"
+        onIcon="pi pi-check" offIcon="pi pi-times" onIcon="pi pi-lock" offIcon="pi pi-lock-open" styleClass="w-9rem"
+        ariaLabel="Do you confirm" />
 
       <!-- Show input field if mode is Manual -->
       <div *ngIf="isAutoMode === false">
-        <p-inputNumber
-          [(ngModel)]="manualOutput"
-          (ngModelChange)="onManualOutputChange()"
-          [min]="0.0"
-          [max]="100.0"
-          [step]="1"
-          [showButtons]="true"
-          [useGrouping]="false"
-          [mode]="'decimal'"
-        ></p-inputNumber>
+        <p-inputNumber [(ngModel)]="manualOutput" (ngModelChange)="onManualOutputChange()" [min]="0.0" [max]="100.0"
+          [step]="1" [showButtons]="true" [useGrouping]="false" [mode]="'decimal'"></p-inputNumber>
       </div>
     </div>
 
     <div class="slider-container">
-      <!-- Slider -->
-      <p-slider
-        [(ngModel)]="sliderValue"
-        (onChange)="onSliderChange()"
-        [min]="controllerParameters.minOutput"
-        [max]="controllerParameters.maxOutput"
-        [style]="{ width: '200px' }"
-      ></p-slider>
-
-      <!-- Display the slider value -->
-      <span class="slider-value">{{ sliderValue }}</span>
+      <!-- Disturbio -->
     </div>
   </div>
 </div>

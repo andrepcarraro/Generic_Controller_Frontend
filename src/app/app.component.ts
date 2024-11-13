@@ -28,6 +28,10 @@ export class AppComponent implements OnInit {
     setPoint: 60,
 
     cycleTime: 200,
+
+    tau: 6000,
+    disturb: 0.0,
+    processDeadTime: 5000
   };
 
   ngOnInit(): void {

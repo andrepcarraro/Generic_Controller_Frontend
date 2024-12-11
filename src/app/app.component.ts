@@ -14,9 +14,9 @@ export class AppComponent implements OnInit {
   title = 'Generic_Controller_Frontend';
 
   controllerParameters: ControlParametersModel = {
-    kp: 1, // Proporcional
-    ti: 99, // Integral
-    td: 0.002, // Derivativo
+    kp: 0.9, // Proporcional
+    ti: 25, // Integral
+    td: 0, // Derivativo
 
     minOutput: 0, // Representa 0%
     maxOutput: 100, // Representa 100%

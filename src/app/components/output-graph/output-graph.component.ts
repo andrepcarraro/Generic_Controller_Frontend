@@ -32,9 +32,9 @@ export class OutputGraphComponent implements OnInit, AfterViewChecked {
       if (outputModel) {
         this.currentOutput = this.AdjustValueToScale(outputModel.output);
 
-        this.chart.data.datasets[0].data.push(outputModel.output);
-        this.chart.data.datasets[1].data.push(outputModel.processVariable);
-        this.chart.data.datasets[2].data.push(outputModel.setPoint);
+        //this.chart.data.datasets[0].data.push(outputModel.output);
+        this.chart.data.datasets[0].data.push(outputModel.processVariable);
+        this.chart.data.datasets[1].data.push(outputModel.setPoint);
 
         this.chart?.data.labels?.push(this.label + '(ms)');
 
@@ -59,15 +59,14 @@ export class OutputGraphComponent implements OnInit, AfterViewChecked {
       type: 'line',
       data: {
         labels: [],
-        datasets: [
-          
-        {
+        datasets: [  
+        /*{
             label: 'Variável manipulada',
             data: [],
             borderColor: documentStyle.getPropertyValue('--orange-500'),
             backgroundColor: 'rgba(255,167,38,0.2)',
             stepped: true
-          },
+          },*/
           {
             label: 'Variável de processo',
             data: [],
